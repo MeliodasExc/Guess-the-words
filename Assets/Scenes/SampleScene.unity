@@ -171,10 +171,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -463,11 +463,11 @@ RectTransform:
   m_Father: {fileID: 215109658}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -150}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 15}
+  m_SizeDelta: {x: 250, y: 100}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &766795650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,7 +514,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1606830366}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: ChangeRow
+        m_MethodName: ValidateWord
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -762,11 +762,18 @@ MonoBehaviour:
     type: 3}
   inputLetter: {fileID: 5682507870711807761, guid: 9e9e0acb6717d1d438454b45701dd33a,
     type: 3}
+  correctLetter: {fileID: 0}
   guessLetterArray: []
   inputRowArray: []
   inputLetterArray: []
+  lastInputLetterList: []
+  word: 
+  letterList: []
   inputController: {fileID: 0}
+  randomWord: 
   difficulty: 1
+  index: 0
+  counter: 0
   numberOfRowsEasy: 6
   numberOfRowsMedium: 4
   numberOfRowsHard: 3
@@ -821,7 +828,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -50, y: -50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2043690641
 MonoBehaviour:
@@ -870,10 +877,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 44.75
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -927,15 +934,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1421221930}
     m_Modifications:
-    - target: {fileID: 3214854339637305781, guid: 7bb6939529fa07a49a57fb0b30070a00,
+    - target: {fileID: 3214854339637305783, guid: 7bb6939529fa07a49a57fb0b30070a00,
         type: 3}
-      propertyPath: m_CullTransparentMesh
-      value: 1
+      propertyPath: m_CellSize.x
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 3214854339637305783, guid: 7bb6939529fa07a49a57fb0b30070a00,
         type: 3}
-      propertyPath: m_Spacing.x
-      value: 5
+      propertyPath: m_CellSize.y
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 3214854339637306952, guid: 7bb6939529fa07a49a57fb0b30070a00,
         type: 3}
@@ -980,7 +987,7 @@ PrefabInstance:
     - target: {fileID: 3214854339637306952, guid: 7bb6939529fa07a49a57fb0b30070a00,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 35
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 3214854339637306952, guid: 7bb6939529fa07a49a57fb0b30070a00,
         type: 3}
@@ -1025,7 +1032,7 @@ PrefabInstance:
     - target: {fileID: 3214854339637306952, guid: 7bb6939529fa07a49a57fb0b30070a00,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -40
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 3214854339637306952, guid: 7bb6939529fa07a49a57fb0b30070a00,
         type: 3}
@@ -1099,7 +1106,7 @@ PrefabInstance:
     - target: {fileID: 4686902331864982300, guid: 7ac91da56eaa3ad4dad99397f7b5a2e2,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 236
+      value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 4686902331864982300, guid: 7ac91da56eaa3ad4dad99397f7b5a2e2,
         type: 3}
@@ -1144,7 +1151,7 @@ PrefabInstance:
     - target: {fileID: 4686902331864982300, guid: 7ac91da56eaa3ad4dad99397f7b5a2e2,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -75
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 4686902331864982300, guid: 7ac91da56eaa3ad4dad99397f7b5a2e2,
         type: 3}
@@ -1160,6 +1167,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686902331864982301, guid: 7ac91da56eaa3ad4dad99397f7b5a2e2,
+        type: 3}
+      propertyPath: m_CellSize.y
+      value: 109
       objectReference: {fileID: 0}
     - target: {fileID: 4686902331864982303, guid: 7ac91da56eaa3ad4dad99397f7b5a2e2,
         type: 3}

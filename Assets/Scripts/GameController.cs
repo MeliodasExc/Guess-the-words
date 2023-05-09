@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour {
     [Space]
     [Header("Attributes")]
     [SerializeField]
+    private string randomWord;
+    [SerializeField]
     private int difficulty = 1;
     private int numberOfRows;
     [SerializeField]
@@ -46,13 +48,9 @@ public class GameController : MonoBehaviour {
     }
     public void NewWord() {
         word = new char[0];
-        var randomWord = wordsToGuess[Random.Range(0, wordsToGuess.Count)].ToUpper();
+        randomWord = wordsToGuess[Random.Range(0, wordsToGuess.Count)].ToUpper();
         word = randomWord.ToCharArray();
-        foreach(var guessWord in wordsToGuess) {
-            if (guessWord == randomWord) {
-                wordsToGuess.Remove(guessWord);
-            }
-        }
+
         lastInputLetterList = new List<string>(word.Length);
         foreach(var letter in word) {
             letterList.Add(letter.ToString());
@@ -87,6 +85,7 @@ public class GameController : MonoBehaviour {
             var newInput = Instantiate(inputLetter, newRow.transform);
             inputLetterArray[j] = newInput;
         }
+       
     }
     public void ChangeRow() {
         index++;
@@ -116,7 +115,11 @@ public class GameController : MonoBehaviour {
         }
     }
     public void ValidateWord() {
-        
+        foreach (var guessWord in wordsToGuess) {
+            if (guessWord == randomWord) {
+                wordsToGuess.Remove(guessWord);
+            }
+        }
         CheckLetter();
         ValidateRow();
         ChangeRow();
