@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
     [Header("gameObjects references")]
     [Space]
-    public string[] wordsToGuess;
+    public List<string> wordsToGuess;
     public GameObject panelGuess;
     public GameObject panelRow;
     public GameObject inputRow;
@@ -46,8 +46,13 @@ public class GameController : MonoBehaviour {
     }
     public void NewWord() {
         word = new char[0];
-        var randomWord = wordsToGuess[Random.Range(0, wordsToGuess.Length)].ToUpper();
+        var randomWord = wordsToGuess[Random.Range(0, wordsToGuess.Count)].ToUpper();
         word = randomWord.ToCharArray();
+        foreach(var guessWord in wordsToGuess) {
+            if (guessWord == randomWord) {
+                wordsToGuess.Remove(guessWord);
+            }
+        }
         lastInputLetterList = new List<string>(word.Length);
         foreach(var letter in word) {
             letterList.Add(letter.ToString());
