@@ -777,6 +777,9 @@ MonoBehaviour:
   numberOfRowsEasy: 6
   numberOfRowsMedium: 4
   numberOfRowsHard: 3
+  correct: {r: 0, g: 0.61, b: 0, a: 1}
+  wrong: {r: 0.851, g: 0.071, b: 0.121, a: 1}
+  correctNotPosition: {r: 0.019607844, g: 0.68235296, b: 0.8, a: 1}
 --- !u!4 &1606830367
 Transform:
   m_ObjectHideFlags: 0

@@ -1,154 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour {
-    [Header("gameObjects references")]
-    [Space]
-    public List<string> wordsToGuess;
-    public GameObject panelGuess;
-    public GameObject panelRow;
-    public GameObject inputRow;
-    public GameObject guessLetter;
-    public GameObject inputLetter;
-    public TextMeshProUGUI correctLetter;
-    [SerializeField]
-    private GameObject[] guessLetterArray;
-    [SerializeField]
-    private GameObject[] inputRowArray;
-    [SerializeField]
-    private GameObject[] inputLetterArray;
-    [SerializeField]
-    private List<string> lastInputLetterList;
-    [SerializeField]
-    private char[] word;
-    [SerializeField]
-    private List<string> letterList;
+public class GameController : MonoBehaviour
+{
+    private BoardController board;
+    public GameObject settings_panel;
     [HideInInspector]
-    public InputController inputController;
-    [Space]
-    [Header("Attributes")]
-    [SerializeField]
-    private string randomWord;
-    [SerializeField]
-    private int difficulty = 1;
-    private int numberOfRows;
-    [SerializeField]
-    private int index;
-    [SerializeField]
-    private int counter;
-    public int numberOfRowsEasy = 6;
-    public int numberOfRowsMedium = 4;
-    public int numberOfRowsHard = 3;
+    public string language="it";
+    [HideInInspector]
+    public int difficulty=0; 
+    [HideInInspector] 
+    public ButtonsController bController;
     private void Start() {
-        NewWord();
+        board = bController.board;
+        board.SetDifficulty(difficulty);
+        board.SetLanguage(language);
+        settings_panel.SetActive(false);
     }
-    public void NewWord() {
-        word = new char[0];
-        randomWord = wordsToGuess[Random.Range(0, wordsToGuess.Count)].ToUpper();
-        word = randomWord.ToCharArray();
-
-        lastInputLetterList = new List<string>(word.Length);
-        foreach(var letter in word) {
-            letterList.Add(letter.ToString());
-        }
-        guessLetterArray = new GameObject[word.Length];
-        inputLetterArray = new GameObject[word.Length];
-        for (int i = 0; i < word.Length; i++) {
-            var newLetter = Instantiate(guessLetter, panelGuess.transform);
-            guessLetterArray[i] = newLetter;
-        }
-
-        switch (difficulty) {
-            case 1:
-                numberOfRows = numberOfRowsEasy;
-                inputRowArray = new GameObject[numberOfRowsEasy];
-
-                break;
-            case 2:
-                numberOfRows = numberOfRowsMedium;
-                inputRowArray = new GameObject[numberOfRowsMedium];
-
-                break;
-            case 3:
-                numberOfRows = numberOfRowsHard;
-                inputRowArray = new GameObject[numberOfRowsHard];
-
-                break;
-        }
-        var newRow = Instantiate(inputRow, panelRow.transform);
-        inputRowArray[index] = newRow;
-        for (int j = 0; j < word.Length; j++) {
-            var newInput = Instantiate(inputLetter, newRow.transform);
-            inputLetterArray[j] = newInput;
-        }
-       
-    }
-    public void ChangeRow() {
-        index++;
-       
-        if (index < numberOfRows) {
-            inputLetterArray = new GameObject[word.Length];
-            var newRow = Instantiate(inputRow, panelRow.transform);
-            inputRowArray[index] = newRow;
-            for (int j = 0; j < word.Length; j++) {
-                Debug.Log($"index {j}");
-                var newInput = Instantiate(inputLetter, newRow.transform);
-                if (lastInputLetterList[j] == letterList[j]) {
-                    inputLetterArray[j] = newInput;
-                    inputLetterArray[j].GetComponent<TMP_InputField>().text = lastInputLetterList[j];
-                    inputLetterArray[j].GetComponent<TMP_InputField>().interactable = false;
-                    inputLetterArray[j].GetComponentInChildren<TextMeshProUGUI>().color = Color.green;
-                    guessLetterArray[j].GetComponentInChildren<TextMeshProUGUI>().text = lastInputLetterList[j];
-
-                }
-                else {
-                    inputLetterArray[j] = newInput;
-                }
-            }
+    public void OnSettingsOpen() {
+        if (settings_panel.activeInHierarchy) {
+            settings_panel.SetActive(false);
         }
         else {
-            Debug.LogWarning("End");
+            settings_panel.SetActive(true);
         }
     }
-    public void ValidateWord() {
-        foreach (var guessWord in wordsToGuess) {
-            if (guessWord == randomWord) {
-                wordsToGuess.Remove(guessWord);
-            }
+    public void OnLanguageChange(string lang) {
+        language = lang;
+        board.SetLanguage(language);
+        if(lang=="it") {
+            
+            bController.langen_b.GetComponent<Outline>().effectColor = Color.black;
+            bController.langit_b.GetComponent<Outline>().effectColor = Color.yellow;
+            bController.langen_b.enabled = false;
+            bController.langit_b.enabled = true;
         }
-        CheckLetter();
-        ValidateRow();
-        ChangeRow();
-        counter = 0;
-    }
-    private void CheckLetter() {
-        lastInputLetterList = new List<string>();
-        foreach (var input in inputLetterArray) {
-            var inputField = input.GetComponent<TMP_InputField>();
-            if (inputField != null) {
-                lastInputLetterList.Add(inputField.text);
-                if (inputField.text == letterList[counter]) {
-                    inputField.GetComponentInChildren<TextMeshProUGUI>().color = Color.green;
-                }
-                else {
-                    inputField.GetComponentInChildren<TextMeshProUGUI>().color = Color.red;
-                    Debug.Log("false");
-                }
-                Debug.Log(counter);
-                counter++;
-            }
-            else {
-                break;
-            }
+        else {
+
+            bController.langen_b.GetComponent<Outline>().effectColor = Color.yellow;
+            bController.langit_b.GetComponent<Outline>().effectColor = Color.black;
+            bController.langen_b.enabled = true;
+            bController.langit_b.enabled = false;
         }
     }
-    private void ValidateRow() {
-        foreach(var input in inputLetterArray) {
-            input.GetComponent<TMP_InputField>().interactable = false;
+    public void OnDifficultyChange(int diff) {
+        difficulty = diff;
+        board.SetDifficulty(difficulty);
+        if (diff==0) {
+            bController.hard_b.GetComponent<Outline>().effectColor = Color.yellow;
+            bController.easy_b.GetComponent<Outline>().effectColor = Color.black;  
+            bController.hard_b.enabled = false;
+            bController.easy_b.enabled = true;
+            
+        }
+        else {
+            bController.hard_b.GetComponent<Outline>().effectColor = Color.black;
+            bController.easy_b.GetComponent<Outline>().effectColor = Color.yellow;
+            bController.hard_b.enabled = true;
+            bController.easy_b.enabled = false;
         }
     }
+
+    
 }
